@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech&display=swap');
+@import './checkbox.css';
+@import './radio.css';
+
+body {
+    font-family: 'Share Tech', sans-serif;
+    font-size: 24px;
+}
+
+button {
+    font-family: 'Share Tech', sans-serif;
+    font-size: 24px;
+    text-transform: uppercase;
+    border: solid 2px black;
+    background-color: white;
+    cursor: pointer;
+    height: 64px;
+}
+
+button:hover {
+    background-color: black;
+    color: white;
+}
+
+
+
+input {
+    font-family: 'Share Tech', sans-serif;
+    font-size: 24px;
+    padding: 16px;
+    border: solid 2px black;
+    background-color: white;
+    height: 64px;
+    box-sizing: border-box;
+    flex: 1;
+}
+
+.flex {
+    display: flex;
+}
+
+.app {
+    max-width: 600px;
+    margin: auto;
+}
+
+.todo {
+    display: flex;
+}
+
+.list {
+    margin-top: 32px;
+}
+
+.count {
+    font-size: 18px;
+    padding: 4px;
+}
+
+.todo>span {
+    height: 64px;
+    padding: 16px;
+    border: 2px solid black;
+    box-sizing: border-box;
+    flex: 1;
+}
+
+.btn-sm {
+    height: 32px;
+    font-size: 18px;
+}
+
+.btn-icon {
+    width: 64px;
+    padding: 16px;
+}
+
+.btn-icon>svg {
+    stroke: black;
+    fill: white;
+}
+
+.btn-icon:hover>svg {
+    stroke:white;
+    fill: black;
+}
+
+.ml-auto {
+    margin-left: auto;
+}

@@ -1,0 +1,26 @@
+[type=radio] {
+    position: absolute;
+    left: 0;
+    opacity: 0.0001;
+}
+
+[type=radio]+label {
+    display: inline-block;
+    border: 2px solid black;
+    height: 32px;
+    box-sizing: border-box;
+    padding: 4px 8px;
+    font-size: 18px;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+[type=radio]:checked+label {
+    background-color: black;
+    color: white;
+}
+
+[type=radio]:not(:checked)+label:hover {
+    background-color: black;
+    color: white;
+}

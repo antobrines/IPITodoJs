@@ -1,0 +1,36 @@
+[type=checkbox] {
+    position: absolute;
+    left: 0;
+    opacity: 0.0001;
+}
+
+[type=checkbox]+label {
+    height: 64px;
+    width: 64px;
+    border: solid 2px black;
+    display: block;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+[type=checkbox]:checked+label:hover {
+    background-color: black;
+}
+
+[type=checkbox]:not(:checked)+label:hover {
+    background-color: white;
+}
+
+[type=checkbox]:checked+label>svg {
+    stroke: black;
+}
+
+[type=checkbox]:not(:checked)+label {
+    stroke: white;
+}
+[type=checkbox]:not(:checked)+label:hover>svg {
+    stroke: black;
+}
+[type=checkbox]:checked+label:hover>svg {
+    stroke: white;
+}
