@@ -1,30 +1,14 @@
 import cross from './assets/cross.svg';
 import deleteIcon from './assets/delete.svg';
-// https://todo-g1.cleverapps.io/api/
-// https://slides.com/mrman/deck-175ec9#/7/3
-// let todos = JSON.parse(localStorage.getItem('todos')) || [];
-let todos = [];
-const ADRESSE_SERVER = "https://todo-g1.cleverapps.io/todos";
+import todoService from './js/TodoService';
 
-async function getTodos() {
-    const res = await fetch(ADRESSE_SERVER, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    });
-    todos = await res.json();
-    todos = todos.map((item) => {
-        var todo = {
-            'id': item._id,
-            'completed': item.state == 'PENDING' ? false : true,
-            'name': item.name
-        }
-        return todo;
-    });
+todoService = new todoService();
+let todos;
+
+todoService.getTodos().then((todoList) => {
+    todos = todoList;
     render();
-}
-getTodos();
+});
 
 const FILTER = {
     ALL: 0,
@@ -32,58 +16,6 @@ const FILTER = {
     COMPLETED: 2
 }
 let filter = FILTER.ALL;
-
-/**
- * Save the todo list to the bdd.
- */
-async function addTodos() {
-    // localStorage.setItem('todos', JSON.stringify(todos));
-    // faire un post pour save tout les todos : > tableau todos 
-
-    const body = JSON.stringify({
-        state: 'PENDING',
-        name: todos.slice(-1)[0].name
-    });
-
-    const res = await fetch(ADRESSE_SERVER, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body
-    });
-    const todo = await res.json();
-    return todo;
-
-}
-
-/* 
-* Delete all or completed todos to the database
-*/
-
-async function deleteTodos(type) {
-    await fetch(ADRESSE_SERVER + `/${type}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-type': 'application/json'
-        }
-    });
-}
-
-/* 
-* Change todos by id to the database delete or put
-*/
-
-async function changeById(id, type) {
-    const res = await fetch(ADRESSE_SERVER + `/${id}`, {
-        method: type,
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    });
-    return res;
-}
-
 
 const button = document.querySelector('button');
 const input = document.querySelector('input');
@@ -103,19 +35,24 @@ function addTodoItem() {
         // Early exit
         return;
     }
-
-    todos.push({
+    const newTodo = {
         id: Math.random(),
         name: input.value,
         completed: false
-    });
+    };
+
+    todos.push(newTodo);
 
     input.value = '';
     input.focus();
 
-    addTodos();
-    getTodos();
-    render();
+    todoService.addTodos(newTodo).then(() => {
+        todoService.getTodos().then((todoList) => {
+            todos = todoList
+            render();
+        });
+    });
+
 }
 
 const list = document.querySelector('.list');
@@ -184,19 +121,18 @@ function createTodoNode(t) {
         todos = todos.map(item => item.id !== t.id
             ? item
             : { ...item, completed: event.target.checked });
-        render();
         // méthod PUT
-        changeById(t.id, 'PUT');
+        todoService.changeById(t.id, 'PUT').then(() => {
+            render();
+        });
+
     });
 
     deleteBtn.addEventListener('click', () => {
-        console.table(todos);
         todos = todos.filter(i => i.id !== t.id);
-        console.table(todos);
         render();
         // delete
-        changeById(t.id, 'DELETE');
-        // saveTodos();
+        todoService.changeById(t.id, 'DELETE');
     });
 
     todoEl.appendChild(checkboxDiv);
@@ -229,7 +165,6 @@ const deleteCompBtn = document.querySelector('#delete-completed');
 deleteCompBtn.addEventListener('click', () => {
     todos = todos.filter(t => t.completed === false);
     // DELETE /todos/completed
-    deleteTodos('completed');
-    // saveTodos();
+    todoService.deleteTodos('completed');
     render();
 });
